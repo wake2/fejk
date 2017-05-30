@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Author;
+use App\Comment;
 use App\Image;
 
 use Illuminate\Support\Facades\Input;
@@ -86,6 +87,12 @@ class ImageController extends Controller
     public function destroy($id)
     {
         $image = Image::find($id);
+        $comments = $image->comments;
+
+        foreach ($comments as $comment) {
+            $comment->delete();
+        }
+
         $image->delete();
 
         return redirect('/')->with('status', 'Usunięto zdjęcie!');
